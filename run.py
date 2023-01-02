@@ -17,7 +17,7 @@ def index():
 @app.route('/api/links')
 def show_links():
     links = db.session.query(Link).all()
-    return [i.json() for i in links]
+    return jsonify([i.json() for i in links])
 
 
 @app.route('/api/check_link', methods=['GET'])
@@ -77,7 +77,7 @@ def redirect_link(link):
 @app.route('/api/link_info/<int:link_id>', methods=['GET'])
 def show_link_info(link_id):
     data = LinkData.query.filter_by(link_id=link_id).all()
-    return jsonify([i.json() for i in data], indent=4)
+    return jsonify([i.json() for i in data])
 
 
 if __name__ == '__main__':
