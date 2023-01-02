@@ -52,12 +52,9 @@ def redirect_link(link):
     if source_link is None:
         logger.debug(f"{link} Forbidden")
         return "Forbidden", 403
-    logger.debug(f"{source_link.source}")
 
     #  checking if exist
     link_in_db = db.session.query(LinkData).filter_by(ip=ip, link_id=source_link.id).first()
-    logger.warning(link_in_db)
-    logger.warning(source_link.id)
 
     if link_in_db is None:
         link_data = LinkData(link_id=source_link.id,
@@ -79,10 +76,8 @@ def redirect_link(link):
 
 @app.route('/api/link_info/<int:link_id>', methods=['GET'])
 def show_link_info(link_id):
-    data = LinkData.query.filter_by(id=link_id).all()
-    for i in data:
-        logger.debug(i)
-    return [i.json() for i in data]
+    data = LinkData.query.filter_by(link_id=link_id).all()
+    return jsonify([i.json() for i in data], indent=4)
 
 
 if __name__ == '__main__':
