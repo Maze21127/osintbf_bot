@@ -7,11 +7,13 @@ from bot.loader import dp
 from bot.states import CreateLink
 from bot.utils.misc import is_correct_link, is_correct_source
 from logger import logger
-from settings import BASE_URL
+from settings import BASE_URL, ADMINS
 
 
 @dp.message_handler(commands=['start'], state="*")
 async def start(message: types.Message):
+    if message.from_user.id not in ADMINS:
+        return
     state = dp.current_state()
     await state.finish()
 
@@ -20,6 +22,8 @@ async def start(message: types.Message):
 
 @dp.message_handler(commands=['show'], state="*")
 async def show(message: types.Message):
+    if message.from_user.id not in ADMINS:
+        return
     state = dp.current_state()
     await state.finish()
 
@@ -29,6 +33,8 @@ async def show(message: types.Message):
 
 @dp.message_handler(commands=['show_all'], state="*")
 async def show_all(message: types.Message):
+    if message.from_user.id not in ADMINS:
+        return
     state = dp.current_state()
     await state.finish()
     return await message.answer(f"https://{BASE_URL}/api/links", disable_web_page_preview=False)
@@ -36,13 +42,16 @@ async def show_all(message: types.Message):
 
 @dp.callback_query_handler(lambda cb: cb.data.startswith("LINK_"))
 async def get_link_info(callback_query: types.CallbackQuery, state: FSMContext):
-    print(callback_query.data)
+    if callback_query.from_user.id not in ADMINS:
+        return
     link_id = int(callback_query.data.split("LINK_")[1])
     return await callback_query.message.answer(f"https://{BASE_URL}/api/link_info/{link_id}")
 
 
 @dp.callback_query_handler(lambda cb: cb.data == 'cancel', state="*")
 async def cancel(callback_query: types.CallbackQuery, state: FSMContext):
+    if callback_query.from_user.id not in ADMINS:
+        return
     state = dp.current_state()
     await state.finish()
 
@@ -52,6 +61,8 @@ async def cancel(callback_query: types.CallbackQuery, state: FSMContext):
 
 @dp.callback_query_handler(lambda cb: cb.data == 'create_link')
 async def create_link_callback(callback_query: types.CallbackQuery, state: FSMContext):
+    if callback_query.from_user.id not in ADMINS:
+        return
     await CreateLink.waiting_redirect_url.set()
     await callback_query.message.edit_text(f"Введите ссылку, которая будет после https://{BASE_URL}/")
     return await callback_query.message.edit_reply_markup(reply_markup=CANCEL_KEYBOARD)
@@ -59,6 +70,8 @@ async def create_link_callback(callback_query: types.CallbackQuery, state: FSMCo
 
 @dp.message_handler(state=CreateLink.waiting_redirect_url)
 async def waiting_redirect(message: types.Message, state: FSMContext):
+    if message.from_user.id not in ADMINS:
+        return
     link = message.text
     logger.debug("Here")
     if not is_correct_link(link):
@@ -75,6 +88,8 @@ async def waiting_redirect(message: types.Message, state: FSMContext):
 
 @dp.message_handler(state=CreateLink.waiting_source_url)
 async def waiting_source(message: types.Message, state: FSMContext):
+    if message.from_user.id not in ADMINS:
+        return
     link = message.text
     if not is_correct_source(link):
         return await message.answer("Неверная ссылка")
