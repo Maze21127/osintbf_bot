@@ -48,7 +48,7 @@ def redirect_link(link):
     ip_info = get_info_by_ip(ip)
     logger.debug(f"{link} - {ip}")
     source_link = Link.query.filter_by(redirect=link).first()
-
+    print(source_link)
     #  checking if exist
     link_in_db = db.session.query(LinkData).filter_by(ip=ip, link_id=source_link.id).first()
     if link_in_db is None:
@@ -66,6 +66,13 @@ def redirect_link(link):
         db.session.add(link_data)
         db.session.commit()
     return redirect(source_link.source)
+
+
+@app.route('/api/link_info/<link>', methods=['GET'])
+def redirect_link(link):
+    print(link)
+    source_link = Link.query.filter_by(redirect=link).first()
+    return f"{source_link.id}"
 
 
 if __name__ == '__main__':
