@@ -57,6 +57,8 @@ def redirect_link(link):
     #  checking if exist
     link_in_db = db.session.query(LinkData).filter_by(ip=ip, link_id=source_link.id).first()
     logger.warning(link_in_db)
+    logger.warning(source_link.id)
+
     if link_in_db is None:
         link_data = LinkData(link_id=source_link.id,
                              ip=ip,
