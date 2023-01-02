@@ -27,6 +27,13 @@ async def show(message: types.Message):
     return await message.answer('Выберите ссылку для получения статистики', reply_markup=get_links_keyboard(links))
 
 
+@dp.message_handler(commands=['show_all'], state="*")
+async def show_all(message: types.Message):
+    state = dp.current_state()
+    await state.finish()
+    return await message.answer(f"https://{BASE_URL}/api/links")
+
+
 @dp.callback_query_handler(lambda cb: cb.data.startswith("LINK_"))
 async def get_link_info(callback_query: types.CallbackQuery, state: FSMContext):
     print(callback_query.data)

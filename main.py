@@ -8,6 +8,7 @@ async def on_startup(dispatcher: Dispatcher):
         types.BotCommand('start', 'Запустить бота'),
         types.BotCommand('help', 'Помощь'),
         types.BotCommand('show', 'Показать ссылки'),
+        types.BotCommand('show_all', 'Показать все ссылки'),
     ])
     logger.info("Commands added")
 
