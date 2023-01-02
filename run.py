@@ -68,7 +68,7 @@ def redirect_link(link):
     return redirect(source_link.source)
 
 
-@app.route('/api/link_info/<link>', methods=['GET'])
+@app.route('/api/link_info/<link_id: int>', methods=['GET'])
 def show_link_info(link_id):
     print(link_id)
     source_link = Link.query.filter_by(id=link_id).first()
