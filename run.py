@@ -80,6 +80,8 @@ def redirect_link(link):
 @app.route('/api/link_info/<int:link_id>', methods=['GET'])
 def show_link_info(link_id):
     data = LinkData.query.filter_by(id=link_id).all()
+    for i in data:
+        logger.debug(i)
     return [i.json() for i in data]
 
 
