@@ -31,7 +31,7 @@ async def show(message: types.Message):
 async def show_all(message: types.Message):
     state = dp.current_state()
     await state.finish()
-    return await message.answer(f"https://{BASE_URL}/api/links")
+    return await message.answer(f"https://{BASE_URL}/api/links", disable_web_page_preview=False)
 
 
 @dp.callback_query_handler(lambda cb: cb.data.startswith("LINK_"))
