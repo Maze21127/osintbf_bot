@@ -4,6 +4,7 @@ from app.ip_info import get_info_by_ip
 from models import Link, LinkData
 from logger import logger
 from settings import BASE_URL
+from waitress import serve
 
 app = create_app()
 
@@ -80,5 +81,6 @@ if __name__ == '__main__':
     with app.app_context():
         db.create_all()
     logger.info("Starting app")
-    app.run(port=6575)
+    serve(app, port=6575)
+
 
