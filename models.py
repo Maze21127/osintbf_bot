@@ -34,5 +34,20 @@ class LinkData(db.Model):
     lat = db.Column(db.Float)
     lon = db.Column(db.Float)
 
+    def json(self):
+        return {
+            "id": self.id,
+            "link_id": self.link_id,
+            "ip": self.ip,
+            "provider": self.provider,
+            "org": self.org,
+            "country": self.country,
+            "region": self.region,
+            "city": self.city,
+            "zip": self.zip,
+            "lat": self.lat,
+            "lon": self.lon
+        }
+
     def __repr__(self):
         return f"{self.link_id}\n{self.ip}"
