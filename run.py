@@ -53,9 +53,10 @@ def redirect_link(link):
         logger.debug(f"{link} Forbidden")
         return "Forbidden", 403
     logger.debug(f"{source_link.source}")
+
     #  checking if exist
     link_in_db = db.session.query(LinkData).filter_by(ip=ip, link_id=source_link.id).first()
-
+    logger.warning(link_in_db)
     if link_in_db is None:
         link_data = LinkData(link_id=source_link.id,
                              ip=ip,
